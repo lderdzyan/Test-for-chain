@@ -25,7 +25,7 @@ export class FrontendStack extends TerraformStack {
         new AwsProvider(this,"aws",{});
 
 	const myBucket = new  S3Bucket(this,"myBucket",{
-		bucket: "mybacketuniqetestl"
+		bucket: "mybacketuniqetestthisistest"
 	});
 	
 	const myOac = new CloudfrontOriginAccessControl(this,"myOac",{
