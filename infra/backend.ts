@@ -1,5 +1,4 @@
-import { settings,lambdaFunctions,api } from "./config";
-import "dotenv/config";
+import { settings,lambdaFunctions,api } from "./config"
 import { Construct } from "constructs";
 import { AwsProvider } from "./.gen/providers/aws/provider"
 import { TerraformStack,Token , Fn, TerraformOutput } from "cdktf";
@@ -20,8 +19,6 @@ import { ApiGatewayIntegrationResponse } from "./.gen/providers/aws/api-gateway-
 import { ApiGatewayMethodResponse } from "./.gen/providers/aws/api-gateway-method-response";
 
 export class BackendStack extends TerraformStack {
-  public readonly apiUrl: string; 
-
   constructor(scope: Construct, id: string) {
     super(scope, id);
 	
@@ -50,7 +47,7 @@ export class BackendStack extends TerraformStack {
 
         const myRole = new IamRole(this,"myRole",{
                 assumeRolePolicy:  Token.asString(myRollDoc.json),
-                name: "myNewRole"
+                name: "myRole"
         });
 
 	const myApi = new ApiGatewayRestApi(this,"myApi", {
@@ -122,8 +119,7 @@ export class BackendStack extends TerraformStack {
                 restApiId: myApi.id
         });
 
-
-    new ApiGatewayIntegration(this, "OptionsIntegration", {
+        new ApiGatewayIntegration(this, "OptionsIntegration", {
                 restApiId: myApi.id,
                 resourceId: myResource.id,
                 httpMethod: optionsMethod.httpMethod,
@@ -133,7 +129,7 @@ export class BackendStack extends TerraformStack {
                 },
         });
 
-    new ApiGatewayIntegrationResponse(this,"corsResponse",{
+	new ApiGatewayIntegrationResponse(this,"corsResponse",{
 		restApiId: myApi.id,
 		resourceId: myResource.id,
 		httpMethod: optionsMethod.httpMethod,
@@ -179,7 +175,7 @@ export class BackendStack extends TerraformStack {
            			   )
             		)
           	),
-        	}
+        	},
      	 });
 
 	const myStage = new ApiGatewayStage(this, "myStage", {
@@ -188,13 +184,11 @@ export class BackendStack extends TerraformStack {
       		stageName: api.stage,
     	});
 
-	this.apiUrl = `https://${myApi.id}.execute-api.${settings.myRegion}.amazonaws.com/${myStage.stageName}/${myResource.pathPart}`;
-    
 	new TerraformOutput(this,"api_uri", {
-      value: this.apiUrl
-    });
+		value: `https://${myApi.id}.execute-api.${settings.myRegion}.amazonaws.com/${myStage.stageName}/${myResource.pathPart}`
+	});
+	
 
 
   }
 }
-
