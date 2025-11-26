@@ -120,7 +120,7 @@ export class BackendStack extends TerraformStack {
                 restApiId: myApi.id
         });
 
-        new ApiGatewayIntegration(this, "OptionsIntegration", {
+    let optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
                 restApiId: myApi.id,
                 resourceId: myResource.id,
                 httpMethod: optionsMethod.httpMethod,
@@ -129,8 +129,8 @@ export class BackendStack extends TerraformStack {
                         "application/json": '{"statusCode": 200}',
                 },
         });
-
-	new ApiGatewayIntegrationResponse(this,"corsResponse",{
+    
+	let corsResponse = new ApiGatewayIntegrationResponse(this,"corsResponse",{
 		restApiId: myApi.id,
 		resourceId: myResource.id,
 		httpMethod: optionsMethod.httpMethod,
@@ -143,6 +143,8 @@ export class BackendStack extends TerraformStack {
 		}	
 	});
 
+    corsResponse.node.addDependency(optionsMethod);
+    corsResponse.node.addDependency(optionsIntegration);
 	new ApiGatewayMethodResponse(this,"methodResponse",{
 		 restApiId: myApi.id,
                 resourceId: myResource.id,
@@ -178,6 +180,11 @@ export class BackendStack extends TerraformStack {
           	),
         	},
      	 });
+
+    myDeploy.node.addDependency(corsResponse);
+    myDeploy.node.addDependency(myMethod);
+    myDeploy.node.addDependency(optionsMethod);
+    myDeploy.node.addDependency(optionsIntegration);
 
 	const myStage = new ApiGatewayStage(this, "myStage", {
       		deploymentId: Token.asString(myDeploy.id),
