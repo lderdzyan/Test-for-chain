@@ -1,0 +1,34 @@
+name: "Infra CI"
+
+on:
+  push:
+    paths:
+      - 'test/**'
+
+
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  aws-assume:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_FED_ROLE_ARN }}
+          role-session-name: "TestFedRole"
+      - name: Assume deploy role AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_TEST_ROLE_ARN }}
+          role-session-name: "TestFedRole"
+          role-chaining: true
+      - name:
+        run: aws iam list-policies
+        shell: bash
