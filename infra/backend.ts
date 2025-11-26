@@ -123,6 +123,7 @@ export class BackendStack extends TerraformStack {
                 restApiId: myApi.id
         });
 
+
     optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
                 restApiId: myApi.id,
                 resourceId: myResource.id,
@@ -145,6 +146,9 @@ export class BackendStack extends TerraformStack {
     			"method.response.header.Access-Control-Allow-Origin"  : "'*'"
 		}	
 	});
+
+    corsResponse.node.addDependency(optionsIntegration);
+    corsResponse.node.addDependency(optionsMethod);
 
 	new ApiGatewayMethodResponse(this,"methodResponse",{
 		 restApiId: myApi.id,
