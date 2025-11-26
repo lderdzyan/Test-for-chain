@@ -32,7 +32,7 @@ jobs:
 
       - name: Set environment variables
         run: echo "AWS_REGION=${{ vars.AWS_REGION }}" >> $GITHUB_ENV
-      - run: echo "profileinfo=${{ secrets.profieinfo }}" >> $GITHUB_ENV
+      - run: echo "PROFILEINFO=${{ secrets.PROFILEINFO }}" >> $GITHUB_ENV
 
 
       - name: Configure AWS credentials
