@@ -57,13 +57,23 @@ jobs:
       - name: CDKTF Get
         working-directory: infra
         run: cdktf get --no-color
-
-      - name: Run CDKTF
+       
+      - name: Deploy Backend
         uses: hashicorp/terraform-cdk-action@v11
         with:
           cdktfVersion: 0.21.0
           terraformVersion: 1.13.5
-          workingDirectory: ./infra 
+          workingDirectory: ./infra
           mode: auto-approve-apply
+          stackName: backend
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Deploy Backend
+        uses: hashicorp/terraform-cdk-action@v11
+        with:
+          cdktfVersion: 0.21.0
+          terraformVersion: 1.13.5
+          workingDirectory: ./infra
+          mode: auto-approve-apply
+          stackName: frontend
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
