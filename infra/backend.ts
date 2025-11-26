@@ -102,7 +102,7 @@ export class BackendStack extends TerraformStack {
 			restApiId: myApi.id,
 			type: "AWS_PROXY",
 			integrationHttpMethod: "POST",
-                	uri: myLambda.invokeArn,
+                	uri: `arn:aws:apigateway:${settings.myRegion}:lambda:path/2015-03-31/functions/${myLambda.arn}/invocations`
        		});
 
         	new IamRolePolicyAttachment(this, `${lambda.funName}role`, {
@@ -144,8 +144,9 @@ export class BackendStack extends TerraformStack {
 	});
 
     corsResponse.node.addDependency(optionsMethod);
+    
     corsResponse.node.addDependency(optionsIntegration);
-	new ApiGatewayMethodResponse(this,"methodResponse",{
+	let optionsMethodResponse = new ApiGatewayMethodResponse(this,"methodResponse",{
 		 restApiId: myApi.id,
                 resourceId: myResource.id,
                 httpMethod: optionsMethod.httpMethod,
@@ -161,6 +162,7 @@ export class BackendStack extends TerraformStack {
                         "method.response.header.Access-Control-Allow-Origin"  : true
                 }
 	});
+    corsResponse.node.addDependency(optionsMethodResponse);
 
 	const myDeploy = new ApiGatewayDeployment(this , "myDeploy", {
         	lifecycle: {
