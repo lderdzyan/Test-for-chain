@@ -1,4 +1,4 @@
-import { settings,lambdaFunctions,api } from "./config"
+import { settings,lambda,api } from "./config"
 import { Construct } from "constructs";
 import { AwsProvider } from "./.gen/providers/aws/provider"
 import { TerraformStack,Token , Fn, TerraformOutput } from "cdktf";
@@ -68,7 +68,7 @@ export class BackendStack extends TerraformStack {
 		restApiId: myApi.id
 	});
 
-	for (const lambda of lambdaFunctions){
+
 	
 		const myZip = new DataArchiveFile(this,`${lambda.funName}zip`,{
 			outputPath: lambda.funName,
@@ -92,29 +92,23 @@ export class BackendStack extends TerraformStack {
       			action: "lambda:InvokeFunction",
       			functionName: myLambda.functionName,
       			principal: "apigateway.amazonaws.com",
-                sourceArn: `arn:aws:execute-api:${settings.myRegion}:${settings.profile}:${myApi.id}/*/*/*`,
+      			sourceArn: `arn:aws:execute-api:${settings.myRegion}:${settings.profile}:${myApi.id}/*/*/*`,
      	 		statementId: "AllowExecutionFromAPIGateway",
    		 });
 
-		    const verbs = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
-
-            for (const verb of verbs) {
-            new ApiGatewayIntegration(this, `${lambda.funName}-${verb}-integration`, {
-                httpMethod: verb,
-                resourceId: myResource.id,
-                restApiId: myApi.id,
-                type: "AWS_PROXY",
-                integrationHttpMethod: "POST",
-                uri: `arn:aws:apigateway:${settings.myRegion}:lambda:path/2015-03-31/functions/${myLambda.arn}/invocations`,
-            });
-            }
+		new ApiGatewayIntegration(this,`${lambda.funName}integration`,{
+			httpMethod: myMethod.httpMethod,
+			resourceId: myResource.id,
+			restApiId: myApi.id,
+			type: "AWS_PROXY",
+			integrationHttpMethod: "POST",
+                	uri: `arn:aws:apigateway:${settings.myRegion}:lambda:path/2015-03-31/functions/${myLambda.arn}/invocations`
+       		});
 
         	new IamRolePolicyAttachment(this, `${lambda.funName}role`, {
                 	policyArn: "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         	        role: myRole.name,
 	        });
-
-	}
 
 	
 	const optionsMethod = new ApiGatewayMethod(this,"optionsMethod",{
@@ -191,10 +185,6 @@ export class BackendStack extends TerraformStack {
     myDeploy.node.addDependency(myMethod);
     myDeploy.node.addDependency(optionsMethod);
     myDeploy.node.addDependency(optionsIntegration);
-    for (const lambda of lambdaFunctions){
-    const integration = this.node.tryFindChild(`${lambda.funName}integration`) as ApiGatewayIntegration;
-    myDeploy.node.addDependency(integration);
-    }
 
 	const myStage = new ApiGatewayStage(this, "myStage", {
       		deploymentId: Token.asString(myDeploy.id),

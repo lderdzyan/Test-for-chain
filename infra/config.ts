@@ -5,7 +5,7 @@ export const settings = {
   profile: process.env.PROFILEINFO!,
 };
 
-const lambda1 = {
+export const lambda = {
     funPathReal: path.join( __dirname, "lambda"),  
     funName: "myLambda",
     nodeRuntime: "nodejs22.x",
@@ -16,7 +16,7 @@ const lambda1 = {
 };
 
 
-export const lambdaFunctions = [lambda1];
+
 export const api = {
     resourcePath: "api",
     stage: "dev",
