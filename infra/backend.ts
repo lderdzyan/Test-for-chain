@@ -122,7 +122,7 @@ export class BackendStack extends TerraformStack {
                 restApiId: myApi.id
         });
 
-        new ApiGatewayIntegration(this, "OptionsIntegration", {
+    const optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
                 restApiId: myApi.id,
                 resourceId: myResource.id,
                 httpMethod: optionsMethod.httpMethod,
@@ -132,7 +132,7 @@ export class BackendStack extends TerraformStack {
                 },
         });
 
-	new ApiGatewayIntegrationResponse(this,"corsResponse",{
+	const corsResponse = new ApiGatewayIntegrationResponse(this,"corsResponse",{
 		restApiId: myApi.id,
 		resourceId: myResource.id,
 		httpMethod: optionsMethod.httpMethod,
