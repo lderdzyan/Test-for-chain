@@ -163,10 +163,6 @@ export class BackendStack extends TerraformStack {
                 }
 	});
 
-    const lambdaIntegrations = lambdaFunctions.map(lambda =>
-        this.node.tryFindChild(`${lambda.funName}integration`) as ApiGatewayIntegration
-    );
-
 	const myDeploy = new ApiGatewayDeployment(this , "myDeploy", {
         	lifecycle: {
           		createBeforeDestroy: true,
