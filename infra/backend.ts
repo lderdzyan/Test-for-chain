@@ -185,6 +185,10 @@ export class BackendStack extends TerraformStack {
     myDeploy.node.addDependency(myMethod);
     myDeploy.node.addDependency(optionsMethod);
     myDeploy.node.addDependency(optionsIntegration);
+    for (const lambda of lambdaFunctions){
+    const integration = this.node.tryFindChild(`${lambda.funName}integration`) as ApiGatewayIntegration;
+    myDeploy.node.addDependency(integration);
+    }
 
 	const myStage = new ApiGatewayStage(this, "myStage", {
       		deploymentId: Token.asString(myDeploy.id),
