@@ -51,7 +51,7 @@ export class BackendStack extends TerraformStack {
 
         const myRole = new IamRole(this,"myRole",{
                 assumeRolePolicy:  Token.asString(myRollDoc.json),
-                name: "myRole"
+                name: "myNewRole"
         });
 
 	const myApi = new ApiGatewayRestApi(this,"myApi", {
