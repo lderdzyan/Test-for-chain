@@ -1,0 +1,32 @@
+<title>Minimal Beautiful App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+<div class="container">
+<h1>Minimal Beautiful App</h1>
+<p class="lead">A tiny, elegant starter: HTML • CSS • ES modules</p>
+<div class="controls">
+<button id="addBtn" class="btn">Add card</button>
+<input id="filter" placeholder="Filter cards..." aria-label="Filter cards">
+</div>
+</div>
+</header>
+
+
+<main class="container main">
+<section id="cards" class="cards" aria-live="polite"></section>
+</main>
+
+
+<footer class="container footer">
+<small>Made with ❤️ — lightweight, responsive, accessible.</small>
+</footer>
+
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
