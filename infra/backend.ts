@@ -179,6 +179,13 @@ export class BackendStack extends TerraformStack {
             		)
           	),
         	},
+            dependsOn: [
+	    	...lambdaFunctions.map(lambda => this.node.tryFindChild(`${lambda.funName}integration`)!),
+		        optionsIntegration,
+		        corsResponse,
+		        myMethod,
+		        optionsMethod,
+	            ]
      	 });
 
 	const myStage = new ApiGatewayStage(this, "myStage", {
