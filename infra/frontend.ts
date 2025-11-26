@@ -8,6 +8,8 @@ import { DataAwsIamPolicyDocument } from "./.gen/providers/aws/data-aws-iam-poli
 import { S3Bucket } from "./.gen/providers/aws/s3-bucket";
 import { S3BucketPolicy } from "./.gen/providers/aws/s3-bucket-policy";
 import { S3Object } from "./.gen/providers/aws/s3-object";
+import * as fs from "fs";
+
 
 import "dotenv/config";
 
