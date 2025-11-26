@@ -15,6 +15,17 @@ jobs:
   aws-assume:
     runs-on: ubuntu-latest
     steps:
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.5
+
+          
       - uses: actions/checkout@v4
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -31,6 +42,24 @@ jobs:
           role-chaining: true
     
         
-      - name:
-        run: aws iam list-policies
-        shell: bash
+      - name: Install Infra dependencies
+        working-directory: infra
+        run: npm install
+
+      - name: Install CDKTF
+        run: npm install --global cdktf-cli@latest
+
+      - name: CDKTF Get
+        working-directory: infra
+        run: cdktf get --no-color
+
+      - name: Run CDKTF
+        uses: hashicorp/terraform-cdk-action@v11
+        with:
+          cdktfVersion: 0.21.0
+          terraformVersion: 1.13.5
+          workingDirectory: ./infra 
+          mode: auto-approve-apply
+          stackName: cdktf-test
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
