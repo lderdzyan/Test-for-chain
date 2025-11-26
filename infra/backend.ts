@@ -92,18 +92,22 @@ export class BackendStack extends TerraformStack {
       			action: "lambda:InvokeFunction",
       			functionName: myLambda.functionName,
       			principal: "apigateway.amazonaws.com",
-      			sourceArn: `arn:aws:execute-api:${settings.myRegion}:${settings.profile}:${myApi.id}/*/*/*`,
+                sourceArn: `arn:aws:execute-api:${settings.myRegion}:${settings.profile}:${myApi.id}/*/*/*`,
      	 		statementId: "AllowExecutionFromAPIGateway",
    		 });
 
-		new ApiGatewayIntegration(this,`${lambda.funName}integration`,{
-			httpMethod: myMethod.httpMethod,
-			resourceId: myResource.id,
-			restApiId: myApi.id,
-			type: "AWS_PROXY",
-			integrationHttpMethod: "POST",
-                	uri: `arn:aws:apigateway:${settings.myRegion}:lambda:path/2015-03-31/functions/${myLambda.arn}/invocations`
-       		});
+		    const verbs = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
+
+            for (const verb of verbs) {
+            new ApiGatewayIntegration(this, `${lambda.funName}-${verb}-integration`, {
+                httpMethod: verb,
+                resourceId: myResource.id,
+                restApiId: myApi.id,
+                type: "AWS_PROXY",
+                integrationHttpMethod: "POST",
+                uri: `arn:aws:apigateway:${settings.myRegion}:lambda:path/2015-03-31/functions/${myLambda.arn}/invocations`,
+            });
+            }
 
         	new IamRolePolicyAttachment(this, `${lambda.funName}role`, {
                 	policyArn: "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
