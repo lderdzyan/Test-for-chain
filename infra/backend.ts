@@ -25,8 +25,7 @@ export class BackendStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 	
-    let optionsIntegration: ApiGatewayIntegration;
-    let corsResponse: ApiGatewayIntegrationResponse;
+
 	new AwsProvider(this,"aws",{});
 
 	new ArchiveProvider(this, "archive", {});
@@ -124,7 +123,7 @@ export class BackendStack extends TerraformStack {
         });
 
 
-    optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
+    new ApiGatewayIntegration(this, "OptionsIntegration", {
                 restApiId: myApi.id,
                 resourceId: myResource.id,
                 httpMethod: optionsMethod.httpMethod,
@@ -134,7 +133,7 @@ export class BackendStack extends TerraformStack {
                 },
         });
 
-	corsResponse = new ApiGatewayIntegrationResponse(this,"corsResponse",{
+    new ApiGatewayIntegrationResponse(this,"corsResponse",{
 		restApiId: myApi.id,
 		resourceId: myResource.id,
 		httpMethod: optionsMethod.httpMethod,
@@ -146,9 +145,6 @@ export class BackendStack extends TerraformStack {
     			"method.response.header.Access-Control-Allow-Origin"  : "'*'"
 		}	
 	});
-
-    corsResponse.node.addDependency(optionsIntegration);
-    corsResponse.node.addDependency(optionsMethod);
 
 	new ApiGatewayMethodResponse(this,"methodResponse",{
 		 restApiId: myApi.id,
@@ -187,14 +183,7 @@ export class BackendStack extends TerraformStack {
            			   )
             		)
           	),
-        	},
-            dependsOn: [
-            ...lambdaIntegrations,
-            optionsIntegration,
-            corsResponse,
-            myMethod,
-            optionsMethod,
-            ]
+        	}
      	 });
 
 	const myStage = new ApiGatewayStage(this, "myStage", {
