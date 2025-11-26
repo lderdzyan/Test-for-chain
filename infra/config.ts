@@ -2,7 +2,7 @@ import * as path from "path";
 
 export const settings = {
   myRegion: process.env.AWS_REGION!,
-  profile: process.env.AWS_PROFILE!,
+  profile: process.env.profileinfo!,
 };
 
 const lambda1 = {
