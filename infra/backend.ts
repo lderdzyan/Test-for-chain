@@ -19,6 +19,7 @@ import { ApiGatewayIntegrationResponse } from "./.gen/providers/aws/api-gateway-
 import { ApiGatewayMethodResponse } from "./.gen/providers/aws/api-gateway-method-response";
 
 export class BackendStack extends TerraformStack {
+  public readonly apiUrl: string;
   constructor(scope: Construct, id: string) {
     super(scope, id);
 	
@@ -184,10 +185,11 @@ export class BackendStack extends TerraformStack {
       		stageName: api.stage,
     	});
 
-	new TerraformOutput(this,"api_uri", {
-		value: `https://${myApi.id}.execute-api.${settings.myRegion}.amazonaws.com/${myStage.stageName}/${myResource.pathPart}`
-	});
-	
+    this.apiUrl = `https://${myApi.id}.execute-api.${settings.myRegion}.amazonaws.com/${myStage.stageName}/${myResource.pathPart}`;
+    
+        new TerraformOutput(this,"api_uri", {
+      value: this.apiUrl
+    });
 
 
   }
