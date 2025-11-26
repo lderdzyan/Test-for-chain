@@ -1,5 +1,10 @@
 import * as path from "path";
 
+export const settings = {
+  myRegion: process.env.AWS_REGION!,
+  profile: process.env.AWS_PROFILE!,
+};
+
 const lambda1 = {
     funPathReal: path.join( __dirname, "lambda"),  
     funName: "myLambda",

@@ -30,6 +30,9 @@ jobs:
         with:
           terraform_version: 1.13.5
 
+      - name: Set environment variables
+        run: echo "AWS_REGION=${{ vars.AWS_REGION }}" >> $GITHUB_ENV
+      - run: echo "AWS_PROFILE=${{ secrets.AWS_PROFILE }}" >> $GITHUB_ENV
 
 
       - name: Configure AWS credentials

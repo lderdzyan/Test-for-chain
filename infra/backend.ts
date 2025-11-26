@@ -1,4 +1,4 @@
-import { lambdaFunctions,api } from "./config";
+import { settings,lambdaFunctions,api } from "./config";
 import "dotenv/config";
 import { Construct } from "constructs";
 import { AwsProvider } from "./.gen/providers/aws/provider"
