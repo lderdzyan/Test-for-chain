@@ -25,7 +25,8 @@ export class BackendStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 	
-
+    let optionsIntegration: ApiGatewayIntegration;
+    let corsResponse: ApiGatewayIntegrationResponse;
 	new AwsProvider(this,"aws",{});
 
 	new ArchiveProvider(this, "archive", {});
@@ -122,7 +123,7 @@ export class BackendStack extends TerraformStack {
                 restApiId: myApi.id
         });
 
-    const optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
+    optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
                 restApiId: myApi.id,
                 resourceId: myResource.id,
                 httpMethod: optionsMethod.httpMethod,
@@ -132,7 +133,7 @@ export class BackendStack extends TerraformStack {
                 },
         });
 
-	const corsResponse = new ApiGatewayIntegrationResponse(this,"corsResponse",{
+	corsResponse = new ApiGatewayIntegrationResponse(this,"corsResponse",{
 		restApiId: myApi.id,
 		resourceId: myResource.id,
 		httpMethod: optionsMethod.httpMethod,
