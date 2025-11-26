@@ -3,7 +3,7 @@ import {FrontendStack} from "./frontend"
 import { App } from "cdktf";
 
 const app = new App();
-new BackendStack(app,"backend");
+
 
 const backendStack = new BackendStack(app, "backend");
 
