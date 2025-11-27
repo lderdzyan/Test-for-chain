@@ -117,7 +117,6 @@ export class FrontendStack extends TerraformStack {
 		bucket: myBucket.bucket,
 		key: "index.html",
 		source: path.join(__dirname,"src", "index.html"),
-		content: appJsContent,
 		contentType: "text/html"
 	});
 
@@ -132,6 +131,7 @@ export class FrontendStack extends TerraformStack {
 		bucket:myBucket.bucket,
 		key:"app.js",
 		source: path.join(__dirname,"src","app.js"),
+		content: appJsContent,
 		contentType: "text/javascript"
 	});   
   }
