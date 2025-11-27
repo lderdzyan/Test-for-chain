@@ -126,24 +126,22 @@ const optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration",
       responseModels: { "application/json": "Empty" },
     });
 
-const optionsIntegrationResponse = new ApiGatewayIntegrationResponse(
-  this,
-  "optionsIntegrationResponse",
-  {
-    restApiId: myApi.id,
-    resourceId: myResource.id,
-    httpMethod: optionsMethod.httpMethod,
-    statusCode: "200",
-    integrationHttpMethod: "OPTIONS",
-    responseParameters: {
-      "method.response.header.Access-Control-Allow-Headers":
-        "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-      "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
-      "method.response.header.Access-Control-Allow-Origin": "'*'",
-    },
-  }
-);
-
+    const optionsIntegrationResponse = new ApiGatewayIntegrationResponse(
+      this,
+      "optionsIntegrationResponse",
+      {
+        restApiId: myApi.id,
+        resourceId: myResource.id,
+        httpMethod: optionsMethod.httpMethod,
+        statusCode: "200",
+        responseParameters: {
+          "method.response.header.Access-Control-Allow-Headers":
+            "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+          "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
+          "method.response.header.Access-Control-Allow-Origin": "'*'",
+        },
+      }
+    );
 optionsIntegrationResponse.node.addDependency(optionsIntegration);
 optionsIntegrationResponse.node.addDependency(optionsMethodResponse);
 
