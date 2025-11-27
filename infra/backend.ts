@@ -97,12 +97,12 @@ export class BackendStack extends TerraformStack {
 
     myIntegration.node.addDependency(myLambdaPermission);
 
-          const optionsMethod = new ApiGatewayMethod(this, "optionsMethod", {
-            authorization: "NONE",
-            httpMethod: "OPTIONS",
-            resourceId: myResource.id,
-            restApiId: myApi.id,
-          });
+            const optionsMethod = new ApiGatewayMethod(this, "optionsMethod", {
+              authorization: "NONE",
+              httpMethod: "OPTIONS",
+              resourceId: myResource.id,
+              restApiId: myApi.id,
+            });
           const optionsIntegration = new ApiGatewayIntegration(this, "optionsIntegration", {
             restApiId: myApi.id,
             resourceId: myResource.id,
@@ -166,7 +166,8 @@ export class BackendStack extends TerraformStack {
     myDeploy.node.addDependency(myIntegration);
     myDeploy.node.addDependency(optionsMethod);
     myDeploy.node.addDependency(optionsIntegrationResponse);
-
+    myDeploy.node.addDependency(optionsIntegration);
+    myDeploy.node.addDependency(optionsMethodResponse);
     const myStage = new ApiGatewayStage(this, "myStage", {
       deploymentId: Token.asString(myDeploy.id),
       restApiId: myApi.id,
