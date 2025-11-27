@@ -146,7 +146,11 @@ export class BackendStack extends TerraformStack {
       restApiId: myApi.id,
       triggers: {
         redeployment: Token.asString(
-          Fn.sha1(Token.asString(Fn.jsonencode([myResource.pathPart])))
+          Fn.sha1(Token.asString(Fn.jsonencode([myResource.pathPart]))),
+          Fn.sha1(Token.asString(Fn.jsonencode([optionsIntegrationResponse])),
+          Fn.sha1(Token.asString(Fn.jsonencode([optionsIntegration]))),
+          Fn.sha1(Token.asString(Fn.jsonencode([myIntegration])))
+        )
         ),
       },
     });
