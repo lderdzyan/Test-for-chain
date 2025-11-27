@@ -128,6 +128,7 @@ export class BackendStack extends TerraformStack {
             "application/json": "Empty",
           },
         });
+        optionsIntegration.node.addDependency(optionsMethod);
       const optionsIntegrationResponse = new ApiGatewayIntegrationResponse(
         this,
         "optionsIntegrationResponse",
@@ -144,6 +145,7 @@ export class BackendStack extends TerraformStack {
           },
         }
       );
+
       optionsIntegrationResponse.node.addDependency(optionsIntegration);
       optionsIntegrationResponse.node.addDependency(optionsMethodResponse);
       optionsMethodResponse.node.addDependency(optionsIntegration);
