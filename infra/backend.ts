@@ -97,54 +97,56 @@ export class BackendStack extends TerraformStack {
 
     myIntegration.node.addDependency(myLambdaPermission);
 
-    const optionsMethod = new ApiGatewayMethod(this, "optionsMethod", {
-      authorization: "NONE",
-      httpMethod: "OPTIONS",
-      resourceId: myResource.id,
-      restApiId: myApi.id,
-    });
-const optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
-  restApiId: myApi.id,
-  resourceId: myResource.id,
-  httpMethod: optionsMethod.httpMethod,
-  type: "MOCK",
-  integrationHttpMethod: "POST",
-  requestTemplates: {
-    "application/json": "{\"statusCode\": 200}"
-  }
-});
-    const optionsMethodResponse = new ApiGatewayMethodResponse(this, "optionsMethodResponse", {
-      restApiId: myApi.id,
-      resourceId: myResource.id,
-      httpMethod: optionsMethod.httpMethod,
-      statusCode: "200",
-      responseParameters: {
-        "method.response.header.Access-Control-Allow-Headers": true,
-        "method.response.header.Access-Control-Allow-Methods": true,
-        "method.response.header.Access-Control-Allow-Origin": true,
-      },
-      responseModels: { "application/json": "Empty" },
-    });
+          const optionsMethod = new ApiGatewayMethod(this, "optionsMethod", {
+            authorization: "NONE",
+            httpMethod: "OPTIONS",
+            resourceId: myResource.id,
+            restApiId: myApi.id,
+          });
+          const optionsIntegration = new ApiGatewayIntegration(this, "optionsIntegration", {
+            restApiId: myApi.id,
+            resourceId: myResource.id,
+            httpMethod: optionsMethod.httpMethod,
+            type: "MOCK",
+            integrationHttpMethod: "POST",
+            requestTemplates: {
+              "application/json": "{\"statusCode\": 200}"
+            }
+          });
 
-    const optionsIntegrationResponse = new ApiGatewayIntegrationResponse(
-      this,
-      "optionsIntegrationResponse",
-      {
-        restApiId: myApi.id,
-        resourceId: myResource.id,
-        httpMethod: optionsMethod.httpMethod,
-        statusCode: "200",
-        responseParameters: {
-          "method.response.header.Access-Control-Allow-Headers":
-            "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-          "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
-          "method.response.header.Access-Control-Allow-Origin": "'*'",
-        },
-      }
-    );
-optionsIntegrationResponse.node.addDependency(optionsIntegration);
-optionsIntegrationResponse.node.addDependency(optionsMethodResponse);
-
+        const optionsMethodResponse = new ApiGatewayMethodResponse(this, "optionsMethodResponse", {
+          restApiId: myApi.id,
+          resourceId: myResource.id,
+          httpMethod: optionsMethod.httpMethod,
+          statusCode: "200",
+          responseParameters: {
+            "method.response.header.Access-Control-Allow-Headers": true,
+            "method.response.header.Access-Control-Allow-Methods": true,
+            "method.response.header.Access-Control-Allow-Origin": true,
+          },
+          responseModels: {
+            "application/json": "Empty",
+          },
+        });
+      const optionsIntegrationResponse = new ApiGatewayIntegrationResponse(
+        this,
+        "optionsIntegrationResponse",
+        {
+          restApiId: myApi.id,
+          resourceId: myResource.id,
+          httpMethod: optionsMethod.httpMethod,
+          statusCode: "200",
+          responseParameters: {
+            "method.response.header.Access-Control-Allow-Headers":
+              "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+            "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
+            "method.response.header.Access-Control-Allow-Origin": "'*'",
+          },
+        }
+      );
+      optionsIntegrationResponse.node.addDependency(optionsIntegration);
+      optionsIntegrationResponse.node.addDependency(optionsMethodResponse);
+      optionsMethodResponse.node.addDependency(optionsIntegration);
     const myDeploy = new ApiGatewayDeployment(this, "myDeploy", {
       lifecycle: { createBeforeDestroy: true },
       restApiId: myApi.id,
