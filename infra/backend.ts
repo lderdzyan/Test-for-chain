@@ -103,15 +103,16 @@ export class BackendStack extends TerraformStack {
       resourceId: myResource.id,
       restApiId: myApi.id,
     });
-
-    const optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
-      restApiId: myApi.id,
-      resourceId: myResource.id,
-      httpMethod: optionsMethod.httpMethod,
-      type: "MOCK",
-      requestTemplates: { "application/json": '{"statusCode": 200}' },
-    });
-
+const optionsIntegration = new ApiGatewayIntegration(this, "OptionsIntegration", {
+  restApiId: myApi.id,
+  resourceId: myResource.id,
+  httpMethod: optionsMethod.httpMethod,
+  type: "MOCK",
+  integrationHttpMethod: "POST",
+  requestTemplates: {
+    "application/json": "{\"statusCode\": 200}"
+  }
+});
     const optionsMethodResponse = new ApiGatewayMethodResponse(this, "optionsMethodResponse", {
       restApiId: myApi.id,
       resourceId: myResource.id,
