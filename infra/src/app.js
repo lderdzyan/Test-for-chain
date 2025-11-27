@@ -35,16 +35,12 @@ function createCard(title = 'Untitled', description = 'No description') {
   return el;
 }
 
-// ------- App Logic -------
-
 const cardsRoot = document.getElementById('cards');
 const addBtn = document.getElementById('addBtn');
 const filter = document.getElementById('filter');
 
-// 🌐 Your backend URL (change this)
+
 const API_URL = "http://localhost:3000/api/data"; 
-// Example backend response: 
-// [ { "title": "Hello", "description": "World" }, ... ]
 
 async function loadFromBackend() {
   try {
@@ -53,7 +49,6 @@ async function loadFromBackend() {
 
     const data = await res.json();
 
-    // data should be an array of objects
     data.forEach(item => {
       cardsRoot.appendChild(
         createCard(item.title, item.description)
@@ -87,5 +82,5 @@ addBtn.addEventListener('click', addCard);
 filter.addEventListener('input', e => applyFilter(e.target.value));
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadFromBackend(); // <-- fetch when page loads
+  loadFromBackend(); 
 });

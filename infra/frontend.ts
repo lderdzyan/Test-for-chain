@@ -130,7 +130,6 @@ export class FrontendStack extends TerraformStack {
 	new S3Object(this,"app",{
 		bucket:myBucket.bucket,
 		key:"app.js",
-		source: path.join(__dirname,"src","app.js"),
 		content: appJsContent,
 		contentType: "text/javascript"
 	});   
