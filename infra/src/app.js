@@ -40,7 +40,7 @@ const addBtn = document.getElementById('addBtn');
 const filter = document.getElementById('filter');
 
 
-const API_URL = "http://localhost:3000/api/data"; 
+const API_URL = "APIURL"; 
 
 async function loadFromBackend() {
   try {
