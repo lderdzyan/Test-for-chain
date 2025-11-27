@@ -125,35 +125,40 @@ export class BackendStack extends TerraformStack {
       responseModels: { "application/json": "Empty" },
     });
 
-    const optionsIntegrationResponse = new ApiGatewayIntegrationResponse(this, "optionsIntegrationResponse", {
-      restApiId: myApi.id,
-      resourceId: myResource.id,
-      httpMethod: optionsMethod.httpMethod,
-      statusCode: "200",
-      responseParameters: {
-        "method.response.header.Access-Control-Allow-Headers":
-          "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-        "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'",
-      },
-    });
+const optionsIntegrationResponse = new ApiGatewayIntegrationResponse(
+  this,
+  "optionsIntegrationResponse",
+  {
+    restApiId: myApi.id,
+    resourceId: myResource.id,
+    httpMethod: optionsMethod.httpMethod,
+    statusCode: "200",
+    integrationHttpMethod: "OPTIONS",
+    responseParameters: {
+      "method.response.header.Access-Control-Allow-Headers":
+        "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+      "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
+      "method.response.header.Access-Control-Allow-Origin": "'*'",
+    },
+  }
+);
 
-    optionsIntegrationResponse.node.addDependency(optionsMethodResponse);
-    optionsIntegrationResponse.node.addDependency(optionsIntegration);
+optionsIntegrationResponse.node.addDependency(optionsIntegration);
+optionsIntegrationResponse.node.addDependency(optionsMethodResponse);
 
     const myDeploy = new ApiGatewayDeployment(this, "myDeploy", {
       lifecycle: { createBeforeDestroy: true },
       restApiId: myApi.id,
       triggers: {
-        redeployment: Fn.sha1(
-          Fn.jsonencode({
-            resource: myResource.pathPart,
-            optIntRes: optionsIntegrationResponse.id,
-            optInt: optionsIntegration.id,
-            mainInt: myIntegration.id,
-          })
-        ),
-      },
+    redeployment: Fn.sha1(
+      Fn.jsonencode({
+        resource: myResource.pathPart,
+        optIntRes: optionsIntegrationResponse.id,
+        optInt: optionsIntegration.id,
+        mainInt: myIntegration.id,
+      })
+    ),
+  },
     });
 
     myDeploy.node.addDependency(myMethod);
