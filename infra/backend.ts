@@ -111,7 +111,8 @@ export class BackendStack extends TerraformStack {
             integrationHttpMethod: "POST",
             requestTemplates: {
               "application/json": "{\"statusCode\": 200}"
-            }
+            },
+            passthroughBehavior: "WHEN_NO_MATCH"
           });
 
         const optionsMethodResponse = new ApiGatewayMethodResponse(this, "optionsMethodResponse", {
