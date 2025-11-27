@@ -120,13 +120,6 @@ export class FrontendStack extends TerraformStack {
 		contentType: "text/html"
 	});
 
-	new S3Object(this,"styles",{
-		bucket: myBucket.bucket,
-		key: "styles.css",
-		source: path.join(__dirname,"src", "styles.css"),
-		contentType: "text/css"
-	});
-
 	new S3Object(this,"app",{
 		bucket:myBucket.bucket,
 		key:"app.js",
