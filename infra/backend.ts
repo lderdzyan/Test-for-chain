@@ -92,7 +92,7 @@ export class BackendStack extends TerraformStack {
       restApiId: myApi.id,
       type: "AWS_PROXY",
       integrationHttpMethod: "POST",
-      uri: `arn:aws:apigateway:${settings.myRegion}:lambda:path/2015-03-31/functions/${myLambda.arn}/invocations`,
+      uri: myLambda.invokeArn,
     });
 
     myIntegration.node.addDependency(myLambdaPermission);
