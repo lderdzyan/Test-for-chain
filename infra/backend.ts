@@ -82,7 +82,7 @@ export class BackendStack extends TerraformStack {
       action: "lambda:InvokeFunction",
       functionName: myLambda.functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn:`arn:aws:execute-api:${settings.myRegion}:${settings.profile}:${myApi.id}/*/${myMethod.httpMethod}${myResource.path}`,
+      sourceArn: `arn:aws:execute-api:${settings.myRegion}:${settings.profile}:${myApi.id}/*/*/*`,
       statementId: "AllowExecutionFromAPIGateway",
     });
 
