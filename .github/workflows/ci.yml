@@ -60,6 +60,20 @@ jobs:
       - name: CDKTF Get
         working-directory: infra
         run: cdktf get --no-color
+
+      - name: CDKTF Synthesize
+        working-directory: infra
+        run: cdktf synth --no-color
+
+      - name: Run tfsec on backend stack
+        uses: aquasecurity/tfsec-action@v1
+        with:
+          directory: infra/cdktf.out/stacks/backend
+
+      - name: Run tfsec on frontend stack
+        uses: aquasecurity/tfsec-action@v1
+        with:
+          directory: infra/cdktf.out/stacks/frontend
        
       - name: Deploy Backend
         uses: hashicorp/terraform-cdk-action@v11
