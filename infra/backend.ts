@@ -1,5 +1,6 @@
 import { settings, lambda, api } from "./config";
 import { Construct } from "constructs";
+import { S3Backend } from "cdktf";
 import { AwsProvider } from "./.gen/providers/aws/provider";
 import { TerraformStack, Token, Fn, TerraformOutput } from "cdktf";
 import { ApiGatewayIntegration } from "./.gen/providers/aws/api-gateway-integration";
@@ -26,6 +27,10 @@ export class BackendStack extends TerraformStack {
     new AwsProvider(this, "aws", {});
     new ArchiveProvider(this, "archive", {});
 
+    new S3Backend(this, {
+      bucket: "my-company-terraform-state",
+      key: "backend/terraform.tfstate",
+    });
     const myRollDoc = new DataAwsIamPolicyDocument(this, "myRollDoc", {
       statement: [
         {
