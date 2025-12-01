@@ -7,6 +7,6 @@ exports.handler = async (event) => {
       "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Allow-Methods": "OPTIONS,GET,POST"
     },
-    body: "Hello from Lambda!"
+    body: "we changed the text and pushed"
   };
 };
