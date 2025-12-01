@@ -1,7 +1,7 @@
 
 import { Construct } from "constructs";
 import { AwsProvider } from "./.gen/providers/aws/provider";
-import { S3Backend } from "cdktf";
+import { S3Bucket } from "./.gen/providers/aws/s3-bucket";
 import { TerraformStack,Token} from "cdktf";
 import { CloudfrontDistribution } from "./.gen/providers/aws/cloudfront-distribution";
 import { CloudfrontOriginAccessControl } from "./.gen/providers/aws/cloudfront-origin-access-control";
