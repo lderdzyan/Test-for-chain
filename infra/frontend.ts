@@ -29,7 +29,7 @@ export class FrontendStack extends TerraformStack {
 
 		
     new S3Backend(this, {
-      bucket: "my-company-terraform-state",
+      bucket: "thisisforterraformstate",
       key: "frontend/terraform.tfstate",
     });
 	const myBucket = new  S3Bucket(this,"myBucket",{

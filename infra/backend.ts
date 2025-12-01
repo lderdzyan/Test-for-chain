@@ -26,9 +26,11 @@ export class BackendStack extends TerraformStack {
 
     new AwsProvider(this, "aws", {});
     new ArchiveProvider(this, "archive", {});
-
+    new  S3Bucket(this,"myBucket",{
+		    bucket: "thisisforterraformstate"
+	  });
     new S3Backend(this, {
-      bucket: "my-company-terraform-state",
+      bucket: "thisisforterraformstate",
       key: "backend/terraform.tfstate",
     });
     const myRollDoc = new DataAwsIamPolicyDocument(this, "myRollDoc", {
