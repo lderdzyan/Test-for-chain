@@ -13,7 +13,7 @@ async function loadFromBackend() {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error!`);
+      throw new Error(`HTTP error! `);
     }
 
     const text = await response.text();
