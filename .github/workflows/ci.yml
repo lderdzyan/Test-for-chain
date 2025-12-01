@@ -6,7 +6,6 @@ on:
       - 'infra/**'
 
 
-
 permissions:
   id-token: write
   contents: read
@@ -64,17 +63,20 @@ jobs:
       - name: CDKTF Synthesize
         working-directory: infra
         run: cdktf synth --no-color
+      - name: Install tfsec
+        run: |
+          curl -sSL https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64 -o tfsec
+          chmod +x tfsec
+          sudo mv tfsec /usr/local/bin/tfsec
 
       - name: Run tfsec on backend stack
-        uses: aquasecurity/tfsec-action@v1
-        with:
-          directory: infra/cdktf.out/stacks/backend
+        working-directory: infra
+        run: tfsec cdktf.out/stacks/backend
 
       - name: Run tfsec on frontend stack
-        uses: aquasecurity/tfsec-action@v1
-        with:
-          directory: infra/cdktf.out/stacks/frontend
-       
+        working-directory: infra
+        run: tfsec cdktf.out/stacks/frontend
+        
       - name: Deploy Backend
         uses: hashicorp/terraform-cdk-action@v11
         with:
