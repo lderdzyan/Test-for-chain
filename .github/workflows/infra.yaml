@@ -134,6 +134,13 @@ jobs:
         working-directory: infra
         run: cdktf get
 
-      - name: CDKTF Deploy
-        working-directory: infra
-        run: cdktf deploy --auto-approve
+
+      - name: Deploy Backend
+        uses: hashicorp/terraform-cdk-action@v11
+        with:
+          cdktfVersion: 0.21.0
+          terraformVersion: 1.13.5
+          workingDirectory: ./infra
+          mode: auto-approve-apply
+          stackName: "backend frontend"
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
