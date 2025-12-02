@@ -51,6 +51,7 @@ jobs:
           scan-type: 'fs'
           scan-ref: '.'
           severity: CRITICAL
+          format: 'table'
           exit-code: 1
 
       - name: Trivy IaC Scan
@@ -59,6 +60,7 @@ jobs:
           scan-type: 'config'
           scan-ref: 'infra/cdktf.out'
           severity: CRITICAL
+          format: 'table'
           exit-code: 1
 
   build:
@@ -107,7 +109,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.13.5
-          
+
       - name: Set environment variables
         run: echo "AWS_REGION=${{ vars.AWS_REGION }}" >> $GITHUB_ENV
       - run: echo "PROFILEINFO=${{ secrets.PROFILEINFO }}" >> $GITHUB_ENV
