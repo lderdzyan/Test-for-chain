@@ -38,7 +38,8 @@ jobs:
         run: npm install -g cdktf-cli@latest
 
       - name: CDKTF Synthesize
-        run: cdktf synth --prefix infra
+        working-directory: infra
+        run: cdktf synth
 
       - name: Trivy FS Scan
         uses: aquasecurity/trivy-action@0.28.0
@@ -77,7 +78,8 @@ jobs:
         run: npm install -g cdktf-cli@latest
 
       - name: CDKTF Synthesize
-        run: cdktf synth --prefix infra
+        working-directory: infra
+        run: cdktf synth
 
       - name: Upload CDKTF output artifact
         uses: actions/upload-artifact@v3
