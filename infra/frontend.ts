@@ -33,7 +33,7 @@ export class FrontendStack extends TerraformStack {
       key: "frontend/terraform.tfstate",
     });
 	const myBucket = new  S3Bucket(this,"myBucket",{
-		bucket: "testbucketnameforci"
+		bucket: "thisissecuritytest"
 	});
 	
 	const myOac = new CloudfrontOriginAccessControl(this,"myOac",{
