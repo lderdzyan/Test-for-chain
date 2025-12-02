@@ -18,28 +18,27 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: recursive
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - uses: hashicorp/setup-terraform@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.13.5
 
       - name: Install Infra dependencies
         run: npm install --prefix infra
 
-      - name: Install CDKTF CLI and ts-node
-        run: npm install -g cdktf-cli typescript ts-node
-
-      - name: Install Trivy
-        run: |
-          curl -sSL https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.56.1_Linux-64bit.tar.gz | tar xz -C /usr/local/bin trivy
+      - name: Install CDKTF CLI
+        run: npm install -g cdktf-cli@latest
 
       - name: CDKTF Get
         working-directory: infra
@@ -48,6 +47,11 @@ jobs:
       - name: CDKTF Synthesize
         working-directory: infra
         run: cdktf synth
+
+      - name: Setup Trivy
+        uses: aquasecurity/setup-trivy@v0.2.1
+        with:
+          version: 0.56.1
 
       - name: Trivy FS Scan (Application / src/)
         run: |
