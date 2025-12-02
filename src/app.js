@@ -19,7 +19,7 @@ async function loadFromBackend() {
     const text = await response.text();
     document.getElementById("message").textContent = text;
   } catch (err) {
-    console.error("Failed to load backend:", err);
+    console.error("Failed to load backend:idk why", err);
     document.getElementById("message").textContent = "Error fetching data!";
   }
 }
