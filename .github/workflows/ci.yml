@@ -76,14 +76,14 @@ jobs:
         id: checkov_backend
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: cdktf.out/stacks/backend
+          directory: infra/cdktf.out/stacks/backend
           framework: terraform 
 
       - name: Test with Checkov
         id: checkov_frontend
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: cdktf.out/stacks/frontend
+          directory: infra/cdktf.out/stacks/frontend
           framework: terraform 
 
       
