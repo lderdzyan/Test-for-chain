@@ -37,6 +37,10 @@ jobs:
       - name: Install CDKTF CLI
         run: npm install -g cdktf-cli@latest
 
+      - name: CDKTF Get
+        working-directory: infra
+        run: cdktf get
+
       - name: CDKTF Synthesize
         working-directory: infra
         run: cdktf synth
@@ -76,6 +80,10 @@ jobs:
 
       - name: Install CDKTF CLI
         run: npm install -g cdktf-cli@latest
+
+      - name: CDKTF Get
+        working-directory: infra
+        run: cdktf get
 
       - name: CDKTF Synthesize
         working-directory: infra
@@ -125,5 +133,10 @@ jobs:
           role-session-name: "InfraDeploy"
           role-chaining: true
 
+      - name: CDKTF Get
+        working-directory: infra
+        run: cdktf get
+
       - name: CDKTF Deploy
-        run: cdktf deploy --prefix infra --auto-approve
+        working-directory: infra
+        run: cdktf deploy --auto-approve
