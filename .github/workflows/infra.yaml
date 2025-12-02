@@ -109,12 +109,11 @@ jobs:
           terraform_version: 1.13.5
 
       - name: Install Infra dependencies
-        working-directory: infra
-        run: npm install
+        run: npm install --prefix infra
 
-      - name: Install ts-node & CDKTF
-        working-directory: infra
-        run: npm install ts-node typescript cdktf cdktf-cli
+      - name: Install CDKTF CLI
+        run: npm install -g cdktf-cli@latest
+
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
