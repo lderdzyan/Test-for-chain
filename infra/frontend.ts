@@ -114,7 +114,7 @@ export class FrontendStack extends TerraformStack {
 		policy: Token.asString(myBucketPolicy.json)
 	});
 
- 	const appJsPath = path.join(__dirname,".", "src", "app.js");
+ 	const appJsPath = path.join(__dirname,"..", "src", "app.js");
     let appJsContent = fs.readFileSync(appJsPath, "utf8");
     appJsContent = appJsContent.replace('"APIURL"', `"${backendApiUrl}"`);
 
