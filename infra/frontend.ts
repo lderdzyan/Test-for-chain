@@ -37,7 +37,7 @@ export class FrontendStack extends TerraformStack {
 	});
 	
 	const myOac = new CloudfrontOriginAccessControl(this,"myOac",{
-		name: `myOacforpoject`,
+		name: `myOacpoject`,
 		originAccessControlOriginType: "s3",
 	        signingBehavior: "always",
       		signingProtocol: "sigv4",
