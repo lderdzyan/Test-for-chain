@@ -20,6 +20,13 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -60,9 +67,26 @@ jobs:
         working-directory: infra
         run: cdktf get --no-color
 
+
       - name: CDKTF Synthesize
         working-directory: infra
         run: cdktf synth --no-color
+
+      - name: Test with Checkov
+        id: checkov_backend
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: cdktf.out/stacks/backend
+          framework: terraform 
+
+      - name: Test with Checkov
+        id: checkov_frontend
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: cdktf.out/stacks/frontend
+          framework: terraform 
+
+      
       - name: Install tfsec
         run: |
           curl -sSL https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64 -o tfsec
