@@ -89,8 +89,8 @@ jobs:
         working-directory: infra
         run: cdktf synth
 
-      - name: Upload CDKTF output artifact
-        uses: actions/upload-artifact@v3
+      - name: Download CDKTF artifact
+        uses: actions/download-artifact@v4
         with:
           name: cdktf-out
           path: infra/cdktf.out
