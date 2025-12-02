@@ -78,6 +78,9 @@ jobs:
         with:
           directory: infra/cdktf.out/stacks/backend
           framework: terraform 
+          
+      - name: Show SARIF results
+        run: cat results.sarif
 
       - name: Test with Checkov
         id: checkov_frontend
