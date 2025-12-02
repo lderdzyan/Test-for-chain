@@ -6,7 +6,7 @@ export const settings = {
 };
 
 export const lambda = {
-    funPathReal: path.join( __dirname,"..","src","lambda"),  
+    funPathReal: path.join( __dirname,"..","src", "lambda"),  
     funName: "myLambda",
     nodeRuntime: "nodejs22.x",
     env: {
