@@ -89,12 +89,11 @@ jobs:
         working-directory: infra
         run: cdktf synth
 
-      - name: Download CDKTF artifact
-        uses: actions/download-artifact@v4
+      - name: Upload CDKTF output artifact
+        uses: actions/upload-artifact@v4
         with:
           name: cdktf-out
           path: infra/cdktf.out
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
