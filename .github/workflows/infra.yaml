@@ -94,48 +94,47 @@ jobs:
         with:
           name: cdktf-out
           path: infra/cdktf.out
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+deploy:
+  needs: build
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
 
-      - name: Upload CDKTF output artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: cdktf-out
-          path: infra/cdktf.out
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+    - uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.13.5
 
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.13.5
+    - name: Install Infra dependencies
+      working-directory: infra
+      run: npm install
 
-      - name: Install CDKTF CLI
-        run: npm install -g cdktf-cli@latest
+    - name: Install ts-node & CDKTF
+      working-directory: infra
+      run: npm install ts-node typescript cdktf cdktf-cli
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ secrets.AWS_FED_ROLE_ARN }}
-          role-session-name: "InfraDeploy"
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_FED_ROLE_ARN }}
+        role-session-name: "InfraDeploy"
 
-      - name: Assume deploy role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ secrets.AWS_TEST_ROLE_ARN }}
-          role-session-name: "InfraDeploy"
-          role-chaining: true
+    - name: Assume deploy role
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_TEST_ROLE_ARN }}
+        role-session-name: "InfraDeploy"
+        role-chaining: true
 
-      - name: CDKTF Get
-        working-directory: infra
-        run: cdktf get
+    - name: CDKTF Get
+      working-directory: infra
+      run: cdktf get
 
-      - name: CDKTF Deploy
-        working-directory: infra
-        run: cdktf deploy --auto-approve
+    - name: CDKTF Deploy
+      working-directory: infra
+      run: cdktf deploy --auto-approve
