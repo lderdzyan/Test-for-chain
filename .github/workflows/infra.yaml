@@ -107,6 +107,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.13.5
+          
+      - name: Set environment variables
+        run: echo "AWS_REGION=${{ vars.AWS_REGION }}" >> $GITHUB_ENV
+      - run: echo "PROFILEINFO=${{ secrets.PROFILEINFO }}" >> $GITHUB_ENV
 
       - name: Install Infra dependencies
         run: npm install --prefix infra
