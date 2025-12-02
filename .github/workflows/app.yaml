@@ -1,0 +1,81 @@
+name: App CI
+
+on:
+  push:
+    paths:
+      - 'src/**'
+  pull_request:
+    paths:
+      - 'src/**'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --prefix src
+
+      - name: Run Trivy FS Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: 'src'
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: 1
+
+      - name: Run Trivy Secret Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: 'src'
+          scanners: secret
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: 1
+
+  build:
+    needs: security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --prefix src
+
+      - name: Build project
+        run: npm run build --prefix src
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --prefix src
+

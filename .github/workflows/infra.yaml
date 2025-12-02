@@ -1,0 +1,112 @@
+name: Infra CI
+
+on:
+  push:
+    paths:
+      - 'infra/**'
+      - 'src/**'
+  pull_request:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Infra dependencies
+        run: npm install --prefix infra
+
+      - name: Install CDKTF CLI
+        run: npm install -g cdktf-cli@latest
+
+      - name: CDKTF Synthesize
+        run: npx cdktf synth --prefix infra
+
+      - name: Trivy FS Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          severity: CRITICAL
+          exit-code: 1
+
+      - name: Trivy IaC Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'config'
+          scan-ref: 'infra/cdktf.out'
+          severity: CRITICAL
+          exit-code: 1
+
+  build:
+    needs: security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Infra dependencies
+        run: npm install --prefix infra
+
+      - name: Install CDKTF CLI
+        run: npm install -g cdktf-cli@latest
+
+      - name: CDKTF Synthesize
+        run: npx cdktf synth --prefix infra
+
+      - name: Upload CDKTF output artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cdktf-out
+          path: infra/cdktf.out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download CDKTF artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: cdktf-out
+          path: infra/cdktf.out
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install CDKTF CLI
+        run: npm install -g cdktf-cli@latest
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_FED_ROLE_ARN }}
+          role-session-name: "InfraDeploy"
+
+      - name: Assume deploy role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_TEST_ROLE_ARN }}
+          role-session-name: "InfraDeploy"
+          role-chaining: true
+
+      - name: CDKTF Deploy
+        run: cdktf deploy --prefix infra --auto-approve
