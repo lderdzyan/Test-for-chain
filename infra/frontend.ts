@@ -114,7 +114,7 @@ export class FrontendStack extends TerraformStack {
 		policy: Token.asString(myBucketPolicy.json)
 	});
 
- 	const appJsPath = path.join(__dirname, "src", "app.js");
+ 	const appJsPath = path.join(__dirname,".", "src", "app.js");
     let appJsContent = fs.readFileSync(appJsPath, "utf8");
     appJsContent = appJsContent.replace('"APIURL"', `"${backendApiUrl}"`);
 
@@ -122,7 +122,7 @@ export class FrontendStack extends TerraformStack {
 	new S3Object(this,"index",{
 		bucket: myBucket.bucket,
 		key: "index.html",
-		source: path.join(__dirname,"src", "index.html"),
+		source: path.join(__dirname,"..","src", "index.html"),
 		contentType: "text/html"
 	});
 
