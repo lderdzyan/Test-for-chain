@@ -48,16 +48,16 @@ jobs:
       - name: Setup Trivy
         uses: aquasecurity/setup-trivy@v0.2.1
         with:
-          trivy-version: latest   # FIXED
+          version: latest  
 
       - name: Trivy FS Scan (Application / src)
         run: |
           echo "=== Trivy FS Scan ==="
-          trivy fs ./src \
-            --severity CRITICAL,HIGH \
-            --format table \
-            --exit-code 1 \
-            --no-progress
+          trivy config infra/cdktf.out \
+          --severity CRITICAL,HIGH \
+          --format table \
+          --exit-code 1 \
+          --quiet
 
       - name: Trivy IaC Scan (CDKTF output)
         run: |
