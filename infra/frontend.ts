@@ -9,7 +9,7 @@ import { DataAwsIamPolicyDocument } from "./.gen/providers/aws/data-aws-iam-poli
 import { S3Bucket } from "./.gen/providers/aws/s3-bucket";
 import { S3BucketPolicy } from "./.gen/providers/aws/s3-bucket-policy";
 import { S3Object } from "./.gen/providers/aws/s3-object";
-import { S3BucketServerSideEncryptionConfiguration } from "./.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
+import { S3BucketServerSideEncryptionConfigurationA } from "./.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
 import * as fs from "fs";
 
 
