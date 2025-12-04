@@ -9,6 +9,7 @@ import { DataAwsIamPolicyDocument } from "./.gen/providers/aws/data-aws-iam-poli
 import { S3Bucket } from "./.gen/providers/aws/s3-bucket";
 import { S3BucketPolicy } from "./.gen/providers/aws/s3-bucket-policy";
 import { S3Object } from "./.gen/providers/aws/s3-object";
+import { S3BucketServerSideEncryptionConfiguration } from "./.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
 import * as fs from "fs";
 
 
@@ -36,14 +37,18 @@ export class FrontendStack extends TerraformStack {
     });
 	const myBucket = new  S3Bucket(this,"myBucket",{
 		bucket: "itssecuritytestbucketl",
-		serverSideEncryptionConfiguration: {
-			rule: {
-				applyServerSideEncryptionByDefault: {
-					kmsMasterKeyId : props.kmsKeyArn,
-                     			sseAlgorithm: "aws:kms"
-				}
-			}
-		}
+	});
+
+	new S3BucketServerSideEncryptionConfiguration(this, "myBucketSSE", {
+  		bucket: myBucket.bucket,
+  		rule: [
+   			 {
+      			applyServerSideEncryptionByDefault: {
+        		sseAlgorithm: "aws:kms",
+        		kmsMasterKeyId: props.kmsKeyArn,
+      			},
+  	  	   },
+  		],
 	});
 	
 	const myOac = new CloudfrontOriginAccessControl(this,"myOac",{
