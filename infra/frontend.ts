@@ -21,7 +21,6 @@ interface FrontendStackProps {
   kmsKeyArn: string;
 }
 
-export interface 
 
 export class FrontendStack extends TerraformStack {
     constructor(scope:Construct, id: string,props: FrontendStackProps){
