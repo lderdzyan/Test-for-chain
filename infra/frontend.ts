@@ -29,7 +29,7 @@ export class FrontendStack extends TerraformStack {
 	const backendApiUrl = props.backendApiUrl;  
         new AwsProvider(this,"aws",{});
 
-    	const stateBucket = new S3Backend(this, {
+    	new S3Backend(this, {
       		bucket: "thisisfortestingterraformstate",
       		key: "frontend/terraform.tfstate",
     	});
