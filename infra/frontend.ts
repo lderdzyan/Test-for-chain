@@ -39,7 +39,7 @@ export class FrontendStack extends TerraformStack {
 		bucket: "itssecuritytestbucketl",
 	});
 
-	new S3BucketServerSideEncryptionConfiguration(this, "myBucketSSE", {
+	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE", {
   		bucket: myBucket.bucket,
   		rule: [
    			 {
