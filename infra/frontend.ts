@@ -1,4 +1,3 @@
-
 import { Construct } from "constructs";
 import { AwsProvider } from "./.gen/providers/aws/provider";
 import { S3Backend } from "cdktf";
@@ -27,14 +26,26 @@ export class FrontendStack extends TerraformStack {
     constructor(scope:Construct, id: string,props: FrontendStackProps){
 	super(scope,id);
 
-		const backendApiUrl = props.backendApiUrl;  
+	const backendApiUrl = props.backendApiUrl;  
         new AwsProvider(this,"aws",{});
 
-		
-    new S3Backend(this, {
-      bucket: "thisisfortestingterraformstate",
-      key: "frontend/terraform.tfstate",
-    });
+    	const stateBucket = new S3Backend(this, {
+      		bucket: "thisisfortestingterraformstate",
+      		key: "frontend/terraform.tfstate",
+    	});
+
+	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE", {
+                bucket: stateBucket.bucket,
+                rule: [
+                         {
+                        applyServerSideEncryptionByDefault: {
+                        sseAlgorithm: "aws:kms",
+                        kmsMasterKeyId: props.kmsKeyArn,
+                        },
+                   },
+                ],
+        });
+
 	const myBucket = new  S3Bucket(this,"myBucket",{
 		bucket: "itssecuritytestbucketl",
 	});
@@ -99,6 +110,7 @@ export class FrontendStack extends TerraformStack {
 	 }
 
 	});
+	
 	const myBucketPolicy = new DataAwsIamPolicyDocument(this,"myBucketPolicy",
       		{
         		statement: [
@@ -130,8 +142,8 @@ export class FrontendStack extends TerraformStack {
 	});
 
  	const appJsPath = path.join(__dirname,"..", "src", "app.js");
-    let appJsContent = fs.readFileSync(appJsPath, "utf8");
-    appJsContent = appJsContent.replace('"APIURL"', `"${backendApiUrl}"`);
+	let appJsContent = fs.readFileSync(appJsPath, "utf8");
+	appJsContent = appJsContent.replace('"APIURL"', `"${backendApiUrl}"`);
 
 
 	new S3Object(this,"index",{
