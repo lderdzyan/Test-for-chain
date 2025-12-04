@@ -18,7 +18,10 @@ import * as path from "path";
 
 interface FrontendStackProps {
   backendApiUrl: string;
+  kmsKeyArn: string;
 }
+
+export interface 
 
 export class FrontendStack extends TerraformStack {
     constructor(scope:Construct, id: string,props: FrontendStackProps){
@@ -33,7 +36,15 @@ export class FrontendStack extends TerraformStack {
       key: "frontend/terraform.tfstate",
     });
 	const myBucket = new  S3Bucket(this,"myBucket",{
-		bucket: "itssecuritytestbucketl"
+		bucket: "itssecuritytestbucketl",
+		serverSideEncryptionConfiguration: {
+			rule: {
+				applyServerSideEncryptionByDefault: {
+					kmsMasterKeyId : props.kmsKeyArn,
+                     			sseAlgorithm: "aws:kms"
+				}
+			}
+		}
 	});
 	
 	const myOac = new CloudfrontOriginAccessControl(this,"myOac",{
