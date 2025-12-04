@@ -1,4 +1,5 @@
 exports.handler = async (event) => {
+  const message = process.env.MESSAGE;
   return {
     statusCode: 200,
     headers: {
@@ -7,6 +8,6 @@ exports.handler = async (event) => {
       "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Allow-Methods": "OPTIONS,GET,POST"
     },
-    body: "we are trying to make project"
+    body: JSON.stringify({ message }),
   };
 };

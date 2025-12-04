@@ -12,6 +12,6 @@ const kmsStack = new KmsStack(app,"kms");
 
 new FrontendStack(app,"frontend",{
   backendApiUrl: backendStack.apiUrl,
-  kmsKeyArn: kmsStack.kmskey.arn
+  kmsKeyArn: kmsStack.kmsKey.arn
 });
 app.synth();
