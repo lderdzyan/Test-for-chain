@@ -1,5 +1,7 @@
-import { TerraformStack} from "cdktf";
+import { TerraformStack } from "cdktf";
 import { Construct } from "constructs";
+
+import { AwsProvider } from "./.gen/providers/aws";  // <-- REQUIRED IMPORT
 import { KmsKey } from "./.gen/providers/aws/kms-key";
 import { DataAwsCallerIdentity } from "./.gen/providers/aws/data-aws-caller-identity";
 
@@ -10,7 +12,7 @@ export class KmsStack extends TerraformStack {
     super(scope, id);
 
     new AwsProvider(this, "aws_kms", {
-      region: "eu-central-1"
+      region: "eu-central-1",
     });
 
     const account = new DataAwsCallerIdentity(this, "account");
@@ -26,13 +28,14 @@ export class KmsStack extends TerraformStack {
             Sid: "Enable IAM User Permissions",
             Effect: "Allow",
             Principal: {
-              AWS: `arn:aws:iam::${account.accountId}:root`
+              AWS: `arn:aws:iam::${account.accountId}:root`,
             },
             Action: "kms:*",
-            Resource: "*"
-          }
-        ]
-      })
+            Resource: "*",
+          },
+        ],
+      }),
     });
   }
 }
+
