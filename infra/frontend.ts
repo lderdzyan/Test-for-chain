@@ -35,7 +35,7 @@ export class FrontendStack extends TerraformStack {
     	});
 
 	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE", {
-                bucket: stateBucket.bucket,
+                bucket: "thisisfortestingterraformstate",
                 rule: [
                          {
                         applyServerSideEncryptionByDefault: {
