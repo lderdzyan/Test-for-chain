@@ -1,3 +1,4 @@
+import { TerraformStack} from "cdktf";
 import { Construct } from "constructs";
 import { KmsKey } from "./.gen/providers/aws/kms-key";
 import { DataAwsCallerIdentity } from "./.gen/providers/aws/data-aws-caller-identity";
