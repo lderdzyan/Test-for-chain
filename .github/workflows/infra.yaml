@@ -66,7 +66,6 @@ jobs:
             --severity CRITICAL,HIGH \
             --format table \
             --exit-code 0 \
-            --no-progress
 
   build:
     needs: security
