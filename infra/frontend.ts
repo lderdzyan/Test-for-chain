@@ -34,7 +34,7 @@ export class FrontendStack extends TerraformStack {
       		key: "frontend/terraform.tfstate",
     	});
 
-	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE", {
+	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE1", {
                 bucket: "thisisfortestingterraformstate",
                 rule: [
                          {
@@ -50,7 +50,7 @@ export class FrontendStack extends TerraformStack {
 		bucket: "itssecuritytestbucketl",
 	});
 
-	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE", {
+	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE2", {
   		bucket: myBucket.bucket,
   		rule: [
    			 {
