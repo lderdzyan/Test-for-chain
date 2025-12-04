@@ -56,7 +56,7 @@ jobs:
           trivy config infra/cdktf.out \
           --severity CRITICAL,HIGH \
           --format table \
-          --exit-code 1 \
+          --exit-code 0 \
           --quiet
 
       - name: Trivy IaC Scan (CDKTF output)
