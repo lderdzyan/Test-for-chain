@@ -33,8 +33,6 @@ export class FrontendStack extends TerraformStack {
     	new S3Backend(this, {
       		bucket: "thisisfortestingterraformstate",
       		key: "frontend/terraform.tfstate",
-			region: settings.myRegion,
-  			kmsKeyId: props.kmsKeyArn,
     	});
 
 	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE1", {

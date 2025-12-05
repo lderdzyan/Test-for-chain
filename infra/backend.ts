@@ -37,8 +37,6 @@ export class BackendStack extends TerraformStack {
     new S3Backend(this, {
       bucket: "thisisfortestingterraformstate",
       key: "backend/terraform.tfstate",
-			region: settings.myRegion,
-  		kmsKeyId: props.kmsKeyArn,
     });
 
     const myRollDoc = new DataAwsIamPolicyDocument(this, "myRollDoc", {
