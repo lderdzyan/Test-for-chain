@@ -13,6 +13,7 @@ export class KmsStack extends TerraformStack {
     new AwsProvider(this, "aws_kms", {});
 
     const account = new DataAwsCallerIdentity(this, "account");
+    const region = process.env.AWS_REGION;
 
     this.kmsKey = new KmsKey(this, "projectKmsKey", {
       description: "Master KMS key",
@@ -48,9 +49,9 @@ export class KmsStack extends TerraformStack {
               StringEquals: {
                 "kms:CallerAccount": account.accountId,
                 "kms:ViaService": [
-                  "s3.eu-central-1.amazonaws.com",
-                  "lambda.eu-central-1.amazonaws.com",
-                  "logs.eu-central-1.amazonaws.com"
+                  `s3.${region}.amazonaws.com`,
+                  `lambda.${region}.amazonaws.com`,
+                  `logs.${region}.amazonaws.com`
                 ]
               }
             }
