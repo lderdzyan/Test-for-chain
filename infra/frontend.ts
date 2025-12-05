@@ -1,3 +1,4 @@
+import { settings } from "./config";
 import { Construct } from "constructs";
 import { AwsProvider } from "./.gen/providers/aws/provider";
 import { S3Backend } from "cdktf";
@@ -32,6 +33,7 @@ export class FrontendStack extends TerraformStack {
     	new S3Backend(this, {
       		bucket: "thisisfortestingterraformstate",
       		key: "frontend/terraform.tfstate",
+			region: settings.myRegion
     	});
 
 	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE1", {
