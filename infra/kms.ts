@@ -10,9 +10,7 @@ export class KmsStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    new AwsProvider(this, "aws_kms", {
-      region: "eu-central-1",
-    });
+    new AwsProvider(this, "aws_kms", {});
 
     const account = new DataAwsCallerIdentity(this, "account");
 
