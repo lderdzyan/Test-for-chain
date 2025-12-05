@@ -80,7 +80,7 @@ export class BackendStack extends TerraformStack {
     });
 
 
-    new CloudwatchLogGroup(this, `${lambda.funName}LogGroup`, {
+    new CloudwatchLogGroup(this, `${lambda.funName}LogGroupMy`, {
       name: `/aws/lambda/${lambda.funName}`,
       retentionInDays: 14,
       kmsKeyId: props.kmsKeyArn, 
