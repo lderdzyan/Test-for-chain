@@ -21,7 +21,7 @@ import { CloudwatchLogGroup } from "./.gen/providers/aws/cloudwatch-log-group";
 import { ApiGatewayIntegrationResponse } from "./.gen/providers/aws/api-gateway-integration-response";
 import { ApiGatewayMethodResponse } from "./.gen/providers/aws/api-gateway-method-response";
 
-export interface BackendStackProps {
+interface BackendStackProps {
   kmsKeyArn: string;
 }
 
