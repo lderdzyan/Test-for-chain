@@ -7,7 +7,7 @@ const app = new App();
 
 const kmsStack = new KmsStack(app,"kms");
 const backendStack = new BackendStack(app,"backend",{
-  kmsKeyArn: kmsStack,
+  kmsKeyArn: kmsStack.kmsKey.arn,
 });
 
 
