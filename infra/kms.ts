@@ -24,7 +24,7 @@ export class KmsStack extends TerraformStack {
         Version: "2012-10-17",
         Statement: [
           {
-            Sid: "Enable IAM User Permissions",
+            Sid: "EnableRootPermissions",
             Effect: "Allow",
             Principal: {
               AWS: `arn:aws:iam::${account.accountId}:root`,
@@ -32,9 +32,35 @@ export class KmsStack extends TerraformStack {
             Action: "kms:*",
             Resource: "*",
           },
+
+
+          {
+            Sid: "AllowAWSAccountServices",
+            Effect: "Allow",
+            Principal: { AWS: "*" },
+            Action: [
+              "kms:Encrypt",
+              "kms:Decrypt",
+              "kms:ReEncrypt*",
+              "kms:GenerateDataKey*",
+              "kms:DescribeKey"
+            ],
+            Resource: "*",
+            Condition: {
+              StringEquals: {
+                "kms:CallerAccount": account.accountId,
+                "kms:ViaService": [
+                  "s3.eu-central-1.amazonaws.com",
+                  "lambda.eu-central-1.amazonaws.com",
+                  "logs.eu-central-1.amazonaws.com"
+                ]
+              }
+            }
+          }
         ],
       }),
     });
   }
 }
+
 
