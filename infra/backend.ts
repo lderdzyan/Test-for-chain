@@ -100,7 +100,6 @@ export class BackendStack extends TerraformStack {
       runtime: lambda.nodeRuntime,
       environment: { variables: lambda.env },
       kmsKeyArn: props.kmsKeyArn, 
-      logRetentionInDays: 14,
     });
 
     const myApi = new ApiGatewayRestApi(this, "myApi", { name: "my_api" });
