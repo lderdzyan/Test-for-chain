@@ -7,10 +7,9 @@ import { CloudfrontDistribution } from "./.gen/providers/aws/cloudfront-distribu
 import { CloudfrontOriginAccessControl } from "./.gen/providers/aws/cloudfront-origin-access-control";
 import { DataAwsIamPolicyDocument } from "./.gen/providers/aws/data-aws-iam-policy-document";
 import { S3Bucket } from "./.gen/providers/aws/s3-bucket";
-import { S3BucketPublicAccessBlock } from "./.gen/providers/aws/s3-bucket-public-access-block";
 import { S3BucketPolicy } from "./.gen/providers/aws/s3-bucket-policy";
 import { S3Object } from "./.gen/providers/aws/s3-object";
-
+import { S3BucketServerSideEncryptionConfigurationA } from "./.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
 import * as fs from "fs";
 
 
@@ -37,26 +36,34 @@ export class FrontendStack extends TerraformStack {
 			region: settings.myRegion
     	});
 
+	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE1", {
+                bucket: "thisisfortestingterraformstate",
+                rule: [
+                         {
+                        applyServerSideEncryptionByDefault: {
+                        sseAlgorithm: "aws:kms",
+                        kmsMasterKeyId: props.kmsKeyArn,
+                        },
+                   },
+                ],
+        });
+
 	const myBucket = new  S3Bucket(this,"myBucket",{
 		bucket: "itssecuritytestbucketl",
-		rule: [
-			{
-				applyServerSideEncryptionByDefault: {
-				sseAlgorithm: "aws:kms",
-				kmsMasterKeyId: props.kmsKeyArn,
-				},
-			},
-			],
-	  }
-	);
-
-	new S3BucketPublicAccessBlock(this, "myBucketPublicAccessBlock", {
-		bucket: myBucket.id,
-		blockPublicAcls: true,
-		ignorePublicAcls: true,
-		blockPublicPolicy: true,
-		restrictPublicBuckets: true,
 	});
+
+	new S3BucketServerSideEncryptionConfigurationA (this, "myBucketSSE2", {
+  		bucket: myBucket.bucket,
+  		rule: [
+   			 {
+      			applyServerSideEncryptionByDefault: {
+        		sseAlgorithm: "aws:kms",
+        		kmsMasterKeyId: props.kmsKeyArn,
+      			},
+  	  	   },
+  		],
+	});
+	
 	const myOac = new CloudfrontOriginAccessControl(this,"myOac",{
 		name: `myOacpojectlin`,
 		originAccessControlOriginType: "s3",
@@ -86,7 +93,7 @@ export class FrontendStack extends TerraformStack {
         	maxTtl: 86400,
        		minTtl: 0,
         	targetOriginId: myBucket.id,
-        	viewerProtocolPolicy: "redirect-to-https",
+        	viewerProtocolPolicy: "allow-all",
       		},
 	    defaultRootObject: "index.html",
             enabled: true,
