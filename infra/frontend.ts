@@ -113,30 +113,31 @@ export class FrontendStack extends TerraformStack {
 
 	});
 	
-	const myBucketPolicy = new DataAwsIamPolicyDocument(this,"myBucketPolicy",
-      		{
-        		statement: [
-         			 {
-            			actions: ["s3:GetObject"],
-            			condition: [
-             				{
-                			test: "StringEquals",
-                			values: [myCloudfront.arn],
-                			variable: "AWS:SourceArn",
-              				},
-            			],
-            			effect: "Allow",
-            			principals: [
-             	 			{
-               	 			identifiers: ["cloudfront.amazonaws.com"],
-                			type: "Service",
-              				},
-            			],
-            			resources: [`${myBucket.arn}/*`],
-            			sid: "AllowCloudFrontServicePrincipalReadWrite",
-          			},
-        		],
-   	});
+	const myBucketPolicy = new DataAwsIamPolicyDocument(this, "myBucketPolicy", {
+	statement: [
+		{
+		sid: "AllowCloudFrontServicePrincipalReadOnly",
+		effect: "Allow",
+		principals: [
+			{
+			type: "Service",
+			identifiers: ["cloudfront.amazonaws.com"],
+			},
+		],
+		actions: ["s3:GetObject"],
+		resources: [`${myBucket.arn}/*`],
+		condition: [
+			{
+			test: "StringEquals",
+			variable: "AWS:SourceArn",
+			values: [
+				`arn:aws:cloudfront::${settings.profile}:distribution/${myCloudfront.id}`
+			],
+			},
+		],
+		},
+	],
+	});
 
 	new S3BucketPolicy(this,"myS3Policy",{
 		bucket: myBucket.bucket,
