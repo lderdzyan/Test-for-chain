@@ -40,12 +40,14 @@ export class FrontendStack extends TerraformStack {
 	const myBucket = new  S3Bucket(this,"myBucket",{
 		bucket: "itssecuritytestbucketl",
 		 serverSideEncryptionConfiguration: {
-		rule: [{
-		applyServerSideEncryptionByDefault: {
-			sseAlgorithm: "aws:kms",
-			kmsMasterKeyId: props.kmsKeyArn,
-		}
-		}]
+		rule: [
+			{
+				applyServerSideEncryptionByDefault: {
+				sseAlgorithm: "aws:kms",
+				kmsMasterKeyId: props.kmsKeyArn,
+				},
+			},
+			],
 	  }
 	});
 
