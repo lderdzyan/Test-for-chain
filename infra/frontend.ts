@@ -113,35 +113,26 @@ export class FrontendStack extends TerraformStack {
 
 	});
 	
-	const myBucketPolicy = new DataAwsIamPolicyDocument(this, "myBucketPolicy", {
-	statement: [
-		{
-		sid: "AllowCloudFrontServicePrincipalReadOnly",
-		effect: "Allow",
-		principals: [
+		const myBucketPolicy = new DataAwsIamPolicyDocument(this, "myBucketPolicy", {
+		statement: [
 			{
-			type: "Service",
-			identifiers: ["cloudfront.amazonaws.com"],
-			},
-		],
-		actions: ["s3:GetObject"],
-		resources: [`${myBucket.arn}/*`],
-		condition: [
-			{
-			test: "StringEquals",
-			variable: "AWS:SourceArn",
-			values: [
-				`arn:aws:cloudfront::${settings.profile}:distribution/${myCloudfront.id}`
+			sid: "AllowCloudFrontServicePrincipalReadOnly",
+			effect: "Allow",
+			principals: [
+				{
+				type: "Service",
+				identifiers: ["cloudfront.amazonaws.com"],
+				},
 			],
+			actions: ["s3:GetObject"],
+			resources: [`${myBucket.arn}/*`],
 			},
 		],
-		},
-	],
-	});
+		});
 
 	new S3BucketPolicy(this,"myS3Policy",{
-		bucket: myBucket.bucket,
-		policy: Token.asString(myBucketPolicy.json)
+	bucket: myBucket.bucket,
+	policy: Token.asString(myBucketPolicy.json)
 	});
 
  	const appJsPath = path.join(__dirname,"..", "src", "app.js");
