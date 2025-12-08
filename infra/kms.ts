@@ -55,7 +55,19 @@ export class KmsStack extends TerraformStack {
                 ]
               }
             }
-          }
+          },
+          {
+          Sid: "AllowCloudFrontUse",
+          Effect: "Allow",
+          Principal: {
+             "Service": "cloudfront.amazonaws.com"
+            },
+          Action: [
+            "kms:Decrypt", 
+            "kms:DescribeKey"
+          ],
+          Resource: "*"
+        }
         ],
       }),
     });
