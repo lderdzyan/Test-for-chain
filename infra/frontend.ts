@@ -39,7 +39,6 @@ export class FrontendStack extends TerraformStack {
 
 	const myBucket = new  S3Bucket(this,"myBucket",{
 		bucket: "itssecuritytestbucketl",
-		 serverSideEncryptionConfiguration: {
 		rule: [
 			{
 				applyServerSideEncryptionByDefault: {
@@ -49,7 +48,7 @@ export class FrontendStack extends TerraformStack {
 			},
 			],
 	  }
-	});
+	);
 
 	new S3BucketPublicAccessBlock(this, "myBucketPublicAccessBlock", {
 		bucket: myBucket.id,
