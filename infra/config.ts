@@ -10,7 +10,7 @@ export const lambda = {
     funName: "myLambda",
     nodeRuntime: "nodejs22.x",
     env: {
-    	MESSAGE: "this text is second  tests",
+    	MESSAGE: "this text is second tests",
     	message2: "this is the best message  ever"
     } 
 };
