@@ -71,7 +71,7 @@ export class FrontendStack extends TerraformStack {
       		signingProtocol: "sigv4",
 	});
 
-	CloudfrontDistribution(this,"myCloudfront",{
+	new CloudfrontDistribution(this,"myCloudfront",{
 	    defaultCacheBehavior: {
        		 allowedMethods: [
         	  	"DELETE",
