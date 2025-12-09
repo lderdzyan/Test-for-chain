@@ -11,7 +11,7 @@ export const lambda = {
     nodeRuntime: "nodejs22.x",
     env: {
     	MESSAGE: "this text is second tests",
-    	message2: "this is the best message  ever"
+    	message2: "this is the best message   ever"
     } 
 };
 

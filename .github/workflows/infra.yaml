@@ -144,13 +144,13 @@ jobs:
         working-directory: infra
         run: cdktf get
           
-      - name: Deploy kms+Backend + Frontend
+      - name: Destroy kms + Backend + Frontend
         uses: hashicorp/terraform-cdk-action@v11
         with:
           cdktfVersion: 0.21.0
           terraformVersion: 1.13.5
           workingDirectory: ./infra
-          mode: auto-approve-apply
+          mode: auto-approve-destroy
           stackName: "kms backend frontend"
           githubToken: ${{ secrets.GITHUB_TOKEN }}
       
